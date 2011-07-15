@@ -1,17 +1,7 @@
-/**
- * Lorensius W. L. T
- * 
- * http://www.londatiga.net
- * 
- * lorenz@londatiga.net 
- */
-
 package net.londatiga.android;
 
 import android.graphics.drawable.Drawable;
 import android.graphics.Bitmap;
-
-import android.view.View.OnClickListener;
 
 /**
  * Action item, displayed as menu with icon and text.
@@ -24,7 +14,6 @@ public class ActionItem {
 	private Bitmap thumb;
 	private String title;
 	private boolean selected;
-	private OnClickListener listener;
 	
 	/**
 	 * Constructor
@@ -73,24 +62,6 @@ public class ActionItem {
 	 */
 	public Drawable getIcon() {
 		return this.icon;
-	}
-	
-	/**
-	 * Set on click listener
-	 * 
-	 * @param listener on click listener {@link View.OnClickListener}
-	 */
-	public void setOnClickListener(OnClickListener listener) {
-		this.listener = listener;
-	}
-	
-	/**
-	 * Get on click listener
-	 * 
-	 * @return on click listener {@link View.OnClickListener}
-	 */
-	public OnClickListener getListener() {
-		return this.listener;
 	}
 	
 	/**

@@ -1,0 +1,7 @@
+CHANGES
+------
+
+2011-07-15:
+- Change on item click listener implementation
+- Remove listener from each action item
+- Add new single listener for all items

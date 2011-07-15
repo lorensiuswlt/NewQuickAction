@@ -1,10 +1,3 @@
-/**
- * Lorensius W. L. T
- * 
- * http://www.londatiga.net
- * 
- * lorenz@londatiga.net 
- */
 package net.londatiga.android;
 
 import android.content.Context;
@@ -14,63 +7,54 @@ import android.graphics.drawable.Drawable;
 
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.LinearLayout;
 
 import android.view.Gravity;
 import android.view.LayoutInflater;
+
 import android.view.View;
 import android.view.View.OnClickListener;
+
+import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.Interpolator;
-import android.view.ViewGroup;
-
-import java.util.ArrayList;
 
 /**
- * Popup window, shows action list as icon and text (QuickContact / Twitter app). 
+ * Quickaction window.
  * 
- * @author Lorensius. W. T
+ * @author Lorensius W. L. T <lorenz@londatiga.net>
+ *
  */
-public class QuickAction extends CustomPopupWindow {
-	private final View root;
-	private final ImageView mArrowUp;
-	private final ImageView mArrowDown;
-	private final Animation mTrackAnim;
-	private final LayoutInflater inflater;
-	private final Context context;
+public class QuickAction extends PopupWindows {
+	private ImageView mArrowUp;
+	private ImageView mArrowDown;
+	private Animation mTrackAnim;
+	private LayoutInflater inflater;
+	private ViewGroup mTrack;
+	private OnActionItemClickListener mListener;
+	
+	private int animStyle;
+	private int mChildPos;
+	private boolean animateTrack;
 	
 	public static final int ANIM_GROW_FROM_LEFT = 1;
 	public static final int ANIM_GROW_FROM_RIGHT = 2;
 	public static final int ANIM_GROW_FROM_CENTER = 3;
 	public static final int ANIM_AUTO = 4;
 	
-	private int animStyle;
-	private boolean animateTrack;
-	private ViewGroup mTrack;
-	private ArrayList<ActionItem> actionList;
-	
 	/**
-	 * Constructor
+	 * Constructor.
 	 * 
-	 * @param anchor  {@link View} on where the popup should be displayed
+	 * @param context Context
 	 */
-	public QuickAction(View anchor) {
-		super(anchor);
+	public QuickAction(Context context) {
+		super(context);
 		
-		actionList	= new ArrayList<ActionItem>();
-		context		= anchor.getContext();
 		inflater 	= (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		
-		root		= (ViewGroup) inflater.inflate(R.layout.quickaction, null);
-		
-		mArrowDown 	= (ImageView) root.findViewById(R.id.arrow_down);
-		mArrowUp 	= (ImageView) root.findViewById(R.id.arrow_up);
-		
-		setContentView(root);
-		
-		mTrackAnim 	= AnimationUtils.loadAnimation(anchor.getContext(), R.anim.rail);
+
+		mTrackAnim 	= AnimationUtils.loadAnimation(context, R.anim.rail);
 		
 		mTrackAnim.setInterpolator(new Interpolator() {
 			public float getInterpolation(float t) {
@@ -82,13 +66,30 @@ public class QuickAction extends CustomPopupWindow {
 	        }
 		});
 	        
-		mTrack 			= (ViewGroup) root.findViewById(R.id.tracks);
+		setRootViewId(R.layout.quickaction);
+		
 		animStyle		= ANIM_AUTO;
 		animateTrack	= true;
+		mChildPos		= 0;
 	}
-
+	
 	/**
-	 * Animate track
+	 * Set root view.
+	 * 
+	 * @param id Layout resource id
+	 */
+	public void setRootViewId(int id) {
+		mRootView	= (ViewGroup) inflater.inflate(id, null);
+		mTrack 		= (ViewGroup) mRootView.findViewById(R.id.tracks);
+
+		mArrowDown 	= (ImageView) mRootView.findViewById(R.id.arrow_down);
+		mArrowUp 	= (ImageView) mRootView.findViewById(R.id.arrow_up);
+
+		setContentView(mRootView);
+	}
+	
+	/**
+	 * Animate track.
 	 * 
 	 * @param animateTrack flag to animate track
 	 */
@@ -97,7 +98,7 @@ public class QuickAction extends CustomPopupWindow {
 	}
 	
 	/**
-	 * Set animation style
+	 * Set animation style.
 	 * 
 	 * @param animStyle animation style, default is set to ANIM_AUTO
 	 */
@@ -111,13 +112,52 @@ public class QuickAction extends CustomPopupWindow {
 	 * @param action  {@link ActionItem}
 	 */
 	public void addActionItem(ActionItem action) {
-		actionList.add(action); 
+		
+		String title 	= action.getTitle();
+		Drawable icon 	= action.getIcon();
+		
+		View container	= (View) inflater.inflate(R.layout.action_item, null);
+		
+		ImageView img 	= (ImageView) container.findViewById(R.id.iv_icon);
+		TextView text 	= (TextView) container.findViewById(R.id.tv_title);
+		
+		if (icon != null) 
+			img.setImageDrawable(icon);
+		else
+			img.setVisibility(View.GONE);
+		
+		if (title != null)
+			text.setText(title);
+		else
+			text.setVisibility(View.GONE);
+		
+		final int pos =  mChildPos;
+		
+		container.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if (mListener != null) mListener.onItemClick(pos);
+					
+				dismiss();
+			}
+		});
+		
+		container.setFocusable(true);
+		container.setClickable(true);
+			 
+		mTrack.addView(container, mChildPos+1);
+		
+		mChildPos++;
+	}
+	
+	public void setOnActionItemClickListener(OnActionItemClickListener listener) {
+		mListener = listener;
 	}
 	
 	/**
-	 * Show popup window
+	 * Show popup mWindow
 	 */
-	public void show () {
+	public void show (View anchor) {
 		preShow();
 
 		int[] location 		= new int[2];
@@ -127,14 +167,14 @@ public class QuickAction extends CustomPopupWindow {
 		Rect anchorRect 	= new Rect(location[0], location[1], location[0] + anchor.getWidth(), location[1] 
 		                	+ anchor.getHeight());
 
-		root.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-		root.measure(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		mRootView.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+		mRootView.measure(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		
-		int rootWidth 		= root.getMeasuredWidth();
-		int rootHeight 		= root.getMeasuredHeight();
+		int rootWidth 		= mRootView.getMeasuredWidth();
+		int rootHeight 		= mRootView.getMeasuredHeight();
 
-		int screenWidth 	= windowManager.getDefaultDisplay().getWidth();
-		//int screenHeight 	= windowManager.getDefaultDisplay().getHeight();
+		int screenWidth 	= mWindowManager.getDefaultDisplay().getWidth();
+		//int screenHeight 	= mWindowManager.getDefaultDisplay().getHeight();
 
 		int xPos 			= (screenWidth - rootWidth) / 2;
 		int yPos	 		= anchorRect.top - rootHeight;
@@ -150,14 +190,12 @@ public class QuickAction extends CustomPopupWindow {
 		showArrow(((onTop) ? R.id.arrow_down : R.id.arrow_up), anchorRect.centerX());
 		
 		setAnimationStyle(screenWidth, anchorRect.centerX(), onTop);
-		
-		createActionList();
-		
-		window.showAtLocation(this.anchor, Gravity.NO_GRAVITY, xPos, yPos);
+	
+		mWindow.showAtLocation(anchor, Gravity.NO_GRAVITY, xPos, yPos);
 		
 		if (animateTrack) mTrack.startAnimation(mTrackAnim);
 	}
-	
+
 	/**
 	 * Set animation style
 	 * 
@@ -170,87 +208,28 @@ public class QuickAction extends CustomPopupWindow {
 
 		switch (animStyle) {
 		case ANIM_GROW_FROM_LEFT:
-			window.setAnimationStyle((onTop) ? R.style.Animations_PopUpMenu_Left : R.style.Animations_PopDownMenu_Left);
+			mWindow.setAnimationStyle((onTop) ? R.style.Animations_PopUpMenu_Left : R.style.Animations_PopDownMenu_Left);
 			break;
 					
 		case ANIM_GROW_FROM_RIGHT:
-			window.setAnimationStyle((onTop) ? R.style.Animations_PopUpMenu_Right : R.style.Animations_PopDownMenu_Right);
+			mWindow.setAnimationStyle((onTop) ? R.style.Animations_PopUpMenu_Right : R.style.Animations_PopDownMenu_Right);
 			break;
 					
 		case ANIM_GROW_FROM_CENTER:
-			window.setAnimationStyle((onTop) ? R.style.Animations_PopUpMenu_Center : R.style.Animations_PopDownMenu_Center);
+			mWindow.setAnimationStyle((onTop) ? R.style.Animations_PopUpMenu_Center : R.style.Animations_PopDownMenu_Center);
 		break;
 					
 		case ANIM_AUTO:
 			if (arrowPos <= screenWidth/4) {
-				window.setAnimationStyle((onTop) ? R.style.Animations_PopUpMenu_Left : R.style.Animations_PopDownMenu_Left);
+				mWindow.setAnimationStyle((onTop) ? R.style.Animations_PopUpMenu_Left : R.style.Animations_PopDownMenu_Left);
 			} else if (arrowPos > screenWidth/4 && arrowPos < 3 * (screenWidth/4)) {
-				window.setAnimationStyle((onTop) ? R.style.Animations_PopUpMenu_Center : R.style.Animations_PopDownMenu_Center);
+				mWindow.setAnimationStyle((onTop) ? R.style.Animations_PopUpMenu_Center : R.style.Animations_PopDownMenu_Center);
 			} else {
-				window.setAnimationStyle((onTop) ? R.style.Animations_PopDownMenu_Right : R.style.Animations_PopDownMenu_Right);
+				mWindow.setAnimationStyle((onTop) ? R.style.Animations_PopDownMenu_Right : R.style.Animations_PopDownMenu_Right);
 			}
 					
 			break;
 		}
-	}
-	
-	/**
-	 * Create action list
-	 * 	 
-	 */
-	private void createActionList() {
-		View view;
-		String title;
-		Drawable icon;
-		OnClickListener listener;
-		int index = 1;
-		
-		for (int i = 0; i < actionList.size(); i++) {
-			title 		= actionList.get(i).getTitle();
-			icon 		= actionList.get(i).getIcon();
-			listener	= actionList.get(i).getListener();
-	
-			view 		= getActionItem(title, icon, listener);
-		
-			view.setFocusable(true);
-			view.setClickable(true);
-			 
-			mTrack.addView(view, index);
-			
-			index++;
-		}
-	}
-	
-	/**
-	 * Get action item {@link View}
-	 * 
-	 * @param title action item title
-	 * @param icon {@link Drawable} action item icon
-	 * @param listener {@link View.OnClickListener} action item listener
-	 * @return action item {@link View}
-	 */
-	private View getActionItem(String title, Drawable icon, OnClickListener listener) {
-		LinearLayout container	= (LinearLayout) inflater.inflate(R.layout.action_item, null);
-		ImageView img 			= (ImageView) container.findViewById(R.id.icon);
-		TextView text 			= (TextView) container.findViewById(R.id.title);
-		
-		if (icon != null) {
-			img.setImageDrawable(icon);
-		} else {
-			img.setVisibility(View.GONE);
-		}
-		
-		if (title != null) {
-			text.setText(title);
-		} else {
-			text.setVisibility(View.GONE);
-		}
-		
-		if (listener != null) {
-			container.setOnClickListener(listener);
-		}
-
-		return container;
 	}
 	
 	/**
@@ -273,4 +252,12 @@ public class QuickAction extends CustomPopupWindow {
       
         hideArrow.setVisibility(View.INVISIBLE);
     }
+	
+	/**
+	 * Listener for item click
+	 *
+	 */
+	public interface OnActionItemClickListener {
+		public abstract void onItemClick(int pos);
+	}
 }

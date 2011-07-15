@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+/*
+**
+** /res/layout/action_item.xml
+**
+** Author: Lorensius W. L. T <lorenz@londatiga.net>
+**
+*/ 
+-->
+
 <LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:orientation="vertical"
@@ -13,12 +23,12 @@
 	android:background="@drawable/quickaction_slider_btn">
 
 	<ImageView
-		android:id="@+id/icon" 
+		android:id="@+id/iv_icon" 
 		android:layout_width="fill_parent" 
 		android:layout_height="wrap_content"/>
 
 	<TextView 
-		android:id="@+id/title"
+		android:id="@+id/tv_title"
 		android:layout_width="fill_parent" 
 		android:layout_height="fill_parent" 
 		android:gravity="center_vertical|center_horizontal"
