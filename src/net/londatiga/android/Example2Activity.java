@@ -22,7 +22,7 @@ import android.widget.PopupWindow;
  * @author Lorensius W. L. T <lorenz@londatiga.net>
  *
  */
-public class NewQA extends Activity {
+public class Example2Activity extends Activity {
 	/**
 	 * Listview selected row
 	 */
@@ -38,7 +38,7 @@ public class NewQA extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        setContentView(R.layout.main);
+        setContentView(R.layout.example2);
         
         ListView mList 			= (ListView) findViewById(R.id.l_list);
         
@@ -80,11 +80,11 @@ public class NewQA extends Activity {
 			public void onItemClick(int pos) {
 				
 				if (pos == 0) { //Add item selected
-					Toast.makeText(NewQA.this, "Add item selected on row " + mSelectedRow, Toast.LENGTH_SHORT).show();
+					Toast.makeText(Example2Activity.this, "Add item selected on row " + mSelectedRow, Toast.LENGTH_SHORT).show();
 				} else if (pos == 1) { //Accept item selected
-					Toast.makeText(NewQA.this, "Accept item selected on row " + mSelectedRow, Toast.LENGTH_SHORT).show();
+					Toast.makeText(Example2Activity.this, "Accept item selected on row " + mSelectedRow, Toast.LENGTH_SHORT).show();
 				} else if (pos == 2) { //Upload item selected
-					Toast.makeText(NewQA.this, "Upload items selected on row " + mSelectedRow, Toast.LENGTH_SHORT).show();
+					Toast.makeText(Example2Activity.this, "Upload items selected on row " + mSelectedRow, Toast.LENGTH_SHORT).show();
 				}	
 			}
 		});

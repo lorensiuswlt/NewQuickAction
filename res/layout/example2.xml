@@ -12,18 +12,10 @@
     	android:textStyle="bold"
     	android:text="New Quickaction Demo"/>
     	
-	<Button
-		android:id="@+id/btn1"
-		android:layout_width="fill_parent"
+    <ListView
+    	android:id="@+id/l_list"
+    	android:layout_width="fill_parent" 
     	android:layout_height="wrap_content"
-    	android:layout_marginTop="10dp"
-    	android:text="Example 1"/>
-	
-	<Button
-		android:id="@+id/btn2"
-		android:layout_width="fill_parent"
-    	android:layout_height="wrap_content"
-    	android:layout_marginTop="5dp"
-    	android:text="Example 2 (Listview)"/>
+    	android:layout_marginTop="10dp"/>
     	 
 </LinearLayout>
