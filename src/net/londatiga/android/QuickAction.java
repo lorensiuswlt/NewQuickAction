@@ -28,6 +28,7 @@ public class QuickAction extends PopupWindows {
     private LayoutInflater            inflater;
     private ViewGroup                 mTrack;
     private OnActionItemClickListener mListener;
+    private View                      mAnchorView;
 
     private int                       animStyle;
     private int                       mChildPos;
@@ -130,7 +131,7 @@ public class QuickAction extends PopupWindows {
             @Override
             public void onClick(View v) {
                 if (mListener != null) {
-                    mListener.onItemClick(pos);
+                    mListener.onItemClick(mAnchorView, pos);
                 }
 
                 dismiss();
@@ -153,6 +154,7 @@ public class QuickAction extends PopupWindows {
      * Show popup mWindow
      */
     public void show(View anchor) {
+        this.mAnchorView = anchor;
         preShow();
 
         int[] location = new int[2];
@@ -286,6 +288,6 @@ public class QuickAction extends PopupWindows {
      * 
      */
     public interface OnActionItemClickListener {
-        public abstract void onItemClick(int pos);
+        public abstract void onItemClick(View anchoredView, int pos);
     }
 }
