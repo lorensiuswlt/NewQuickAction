@@ -2,4 +2,5 @@
 <resources>
     <string name="hello">Hello World, NewQA!</string>
     <string name="app_name">NewQuickAction</string>
+    <item type="id" name="tag_action"></item>
 </resources>
