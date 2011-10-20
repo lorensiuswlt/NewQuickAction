@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 
 /**
- * Quickaction demo activity. 
+ * QuickAction demo activity. 
  * 
  * This demo shows how to use quickaction, add items, setup listener for 
  * action item click and dismiss. 
@@ -18,48 +18,47 @@ import android.view.View.OnClickListener;
  *
  */
 public class Example1Activity extends Activity {
+	private static final int ID_ADD = 1;
+	private static final int ID_ACCEPT = 2;
+	private static final int ID_UPLOAD = 3;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
 		setContentView(R.layout.example1);
 		
-		//Add action item
-        ActionItem addAction = new ActionItem();
-		
-		addAction.setTitle("Add");
-		addAction.setIcon(getResources().getDrawable(R.drawable.ic_add));
-
-		//Accept action item
-		ActionItem accAction = new ActionItem();
-		
-		accAction.setTitle("Accept");
-		accAction.setIcon(getResources().getDrawable(R.drawable.ic_accept));
-		
-		//Upload action item
-		ActionItem upAction = new ActionItem();
-		
-		upAction.setTitle("Upload");
-		upAction.setIcon(getResources().getDrawable(R.drawable.ic_up));
-		
+		ActionItem addItem 		= new ActionItem(ID_ADD, "Add", getResources().getDrawable(R.drawable.ic_add));
+		ActionItem acceptItem 	= new ActionItem(ID_ACCEPT, "Accept", getResources().getDrawable(R.drawable.ic_accept));
+        ActionItem uploadItem 	= new ActionItem(ID_UPLOAD, "Upload", getResources().getDrawable(R.drawable.ic_up));
+       
+        //use setSticky(true) to disable QuickAction dialog being dismissed after an item is clicked
+        uploadItem.setSticky(true);
+        
 		final QuickAction mQuickAction 	= new QuickAction(this);
 		
-		mQuickAction.addActionItem(addAction);
-		mQuickAction.addActionItem(accAction);
-		mQuickAction.addActionItem(upAction);
+		mQuickAction.addActionItem(addItem);
+		mQuickAction.addActionItem(acceptItem);
+		mQuickAction.addActionItem(uploadItem);
 		
 		//setup the action item click listener
-		mQuickAction.setOnActionItemClickListener(new QuickAction.OnActionItemClickListener() {			
+		mQuickAction.setOnActionItemClickListener(new QuickAction.OnActionItemClickListener() {
 			@Override
-			public void onItemClick(int pos) {
+			public void onItemClick(QuickAction quickAction, int pos, int actionId) {
+				ActionItem actionItem = quickAction.getActionItem(pos);
 				
-				if (pos == 0) { //Add item selected
-					Toast.makeText(Example1Activity.this, "Add item selected", Toast.LENGTH_SHORT).show();
-				} else if (pos == 1) { //Accept item selected
-					Toast.makeText(Example1Activity.this, "Accept item selected", Toast.LENGTH_SHORT).show();
-				} else if (pos == 2) { //Upload item selected
-					Toast.makeText(Example1Activity.this, "Upload items selected", Toast.LENGTH_SHORT).show();
-				}	
+				if (actionId == ID_ADD) {
+					Toast.makeText(getApplicationContext(), "Add item selected", Toast.LENGTH_SHORT).show();
+				} else {
+					Toast.makeText(getApplicationContext(), actionItem.getTitle() + " selected", Toast.LENGTH_SHORT).show();
+				}
+			}
+		});
+		
+		mQuickAction.setOnDismissListener(new QuickAction.OnDismissListener() {
+			@Override
+			public void onDismiss() {
+				Toast.makeText(getApplicationContext(), "Ups..dismissed", Toast.LENGTH_SHORT).show();
 			}
 		});
 		

@@ -45,7 +45,8 @@ public final class R {
         public static final int quickaction_slider_grip_left=0x7f020010;
         public static final int quickaction_slider_grip_right=0x7f020011;
         public static final int quickaction_top_frame=0x7f020012;
-        public static final int textfield_default=0x7f020013;
+        public static final int quickcontact_drop_shadow=0x7f020013;
+        public static final int textfield_default=0x7f020014;
     }
     public static final class id {
         public static final int arrow_down=0x7f07000c;
