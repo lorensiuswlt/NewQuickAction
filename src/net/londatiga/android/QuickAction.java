@@ -49,7 +49,8 @@ public class QuickAction extends PopupWindows implements OnDismissListener {
 	public static final int ANIM_GROW_FROM_RIGHT = 2;
 	public static final int ANIM_GROW_FROM_CENTER = 3;
 	public static final int ANIM_AUTO = 4;
-	
+	private boolean showOnTop;
+
 	/**
 	 * Constructor.
 	 * 
@@ -208,7 +209,7 @@ public class QuickAction extends PopupWindows implements OnDismissListener {
 		mRootView.measure(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 
 		int screenWidth = mWindowManager.getDefaultDisplay().getWidth();
-		//int screenHeight 	= mWindowManager.getDefaultDisplay().getHeight();
+		int screenHeight 	= mWindowManager.getDefaultDisplay().getHeight();
 
 		int rootWidth = mRootView.getMeasuredWidth();
 		int rootHeight = mRootView.getMeasuredHeight();
@@ -218,13 +219,18 @@ public class QuickAction extends PopupWindows implements OnDismissListener {
 
 		int xPos = (screenWidth - rootWidth) / 2;
 		int yPos = focusY - rootHeight;
+		if (!showOnTop) yPos = focusY;
 
-		boolean onTop = true;
+		boolean onTop = showOnTop;
 
 		// display on bottom
-		if (rootHeight > focusY ) {
+		if (showOnTop && rootHeight > focusY ) {
 			yPos = focusY;
 			onTop = false;
+		}
+		else if (!showOnTop && rootHeight + focusY > screenHeight) {
+			onTop = true;
+			yPos = focusY - rootHeight;
 		}
 
 		showArrow(((onTop) ? R.id.arrow_down : R.id.arrow_up), focusX);
@@ -313,7 +319,15 @@ public class QuickAction extends PopupWindows implements OnDismissListener {
 			mDismissListener.onDismiss();
 		}
 	}
-	
+
+	/**
+	 * Sets if the popup should be shown on top by default
+	 * @param showOnTop true to show on top
+	 */
+	public void showOnTop(boolean showOnTop) {
+		this.showOnTop = showOnTop;
+	}
+
 	/**
 	 * Listener for item click
 	 *
