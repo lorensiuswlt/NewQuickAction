@@ -15,7 +15,6 @@ import android.view.animation.Interpolator;
 import android.widget.ImageView;
 import android.widget.PopupWindow.OnDismissListener;
 import android.widget.TextView;
-import de.widemeadows.android.froozlepaint.R;
 
 import java.util.ArrayList;
 import java.util.List;
