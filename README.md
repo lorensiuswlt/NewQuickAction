@@ -3,6 +3,15 @@ NewQuickAction
 
 NewQuickAction is a small android library to create QuickAction dialog.
 
+Hi, i fixs bug in shown QuickAction at larges screens.
+
+QuickAction correctly shown at small screens, her width is width of screen.
+And QuickActtion correctly shown at large screen, and her width value is MAX_WIDTH_POPUP_WINDOWS constant. Arrow shown is correctly, too.
+
+Add constant MAX_WIDTH_POPUP_WINDOWS;
+Set min SDK version(API 7, as before) and target SDK version(API 15).
+
+
 How to Use
 ==========
 This repo includes a sample Activity (__ExampleActivity1.java__) to show how to use QuickAction.
@@ -79,6 +88,7 @@ Developed By
 ============
 
 * Lorensius W. L. T - <lorenz@londatiga.net>
+* Maksim Bartosh <mksm.brtsh@gmail.com>
 
 Contributors
 ============

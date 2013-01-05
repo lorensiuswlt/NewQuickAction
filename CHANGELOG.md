@@ -14,3 +14,4 @@ Version 1.0.0 *(2011-10-20)*
 3. New listener to handle on dismiss event.
 4. Fix force close that occured when tapping randomly on a view to show QuickAction dialog ([issue](https://github.com/lorensiuswlt/NewQuickAction3D/issues/2)). Thanx to [Zammbi](zammbi@gmail.com) for bug fixing..
 5. Add __Apache License, Version 2.0__ to this source code (see LICENSE.txt)
+6. QuickAction was adapted to HD-screens. By Maksim Bartosh <mksm.brtsh@gmail.com>
