@@ -31,7 +31,6 @@ public class Example1Activity extends Activity {
 		ActionItem addItem 		= new ActionItem(ID_ADD, "Add", getResources().getDrawable(R.drawable.ic_add));
 		ActionItem acceptItem 	= new ActionItem(ID_ACCEPT, "Accept", getResources().getDrawable(R.drawable.ic_accept));
         ActionItem uploadItem 	= new ActionItem(ID_UPLOAD, "Upload", getResources().getDrawable(R.drawable.ic_up));
-       
         //use setSticky(true) to disable QuickAction dialog being dismissed after an item is clicked
         uploadItem.setSticky(true);
         
@@ -40,7 +39,7 @@ public class Example1Activity extends Activity {
 		mQuickAction.addActionItem(addItem);
 		mQuickAction.addActionItem(acceptItem);
 		mQuickAction.addActionItem(uploadItem);
-		
+
 		//setup the action item click listener
 		mQuickAction.setOnActionItemClickListener(new QuickAction.OnActionItemClickListener() {
 			@Override
@@ -76,6 +75,22 @@ public class Example1Activity extends Activity {
 			public void onClick(View v) {
 				mQuickAction.show(v);
 				mQuickAction.setAnimStyle(QuickAction.ANIM_GROW_FROM_CENTER);
+			}
+		});
+		// right button
+		Button btn3 = (Button) this.findViewById(R.id.btn3);
+		btn3.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				mQuickAction.show(v);
+			}
+		});
+		// center button
+		Button btn4 = (Button) this.findViewById(R.id.btn4);
+		btn4.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				mQuickAction.show(v);
 			}
 		});
 	}

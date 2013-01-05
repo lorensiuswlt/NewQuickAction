@@ -79,6 +79,7 @@ Developed By
 ============
 
 * Lorensius W. L. T - <lorenz@londatiga.net>
+* Maksim Bartosh <mksm.brtsh@gmail.com>
 
 Contributors
 ============

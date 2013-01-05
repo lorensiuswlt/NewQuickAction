@@ -24,6 +24,7 @@ public class PopupWindows {
 	protected View mRootView;
 	protected Drawable mBackground = null;
 	protected WindowManager mWindowManager;
+	public static final int MAX_WIDTH_POPUP_WINDOWS = 450;
 	
 	/**
 	 * Constructor.
@@ -76,7 +77,9 @@ public class PopupWindows {
 		else 
 			mWindow.setBackgroundDrawable(mBackground);
 
-		mWindow.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
+		int screenWidth 	= mWindowManager.getDefaultDisplay().getWidth();
+		int w = screenWidth < MAX_WIDTH_POPUP_WINDOWS ? screenWidth : MAX_WIDTH_POPUP_WINDOWS;
+		mWindow.setWidth(w);//WindowManager.LayoutParams.WRAP_CONTENT);
 		mWindow.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
 		mWindow.setTouchable(true);
 		mWindow.setFocusable(true);
