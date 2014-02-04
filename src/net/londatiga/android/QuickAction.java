@@ -1,27 +1,23 @@
 package net.londatiga.android;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.Context;
-
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.PopupWindow.OnDismissListener;
-
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
-
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.Interpolator;
+import android.widget.ImageView;
+import android.widget.PopupWindow.OnDismissListener;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * QuickAction dialog.
@@ -52,7 +48,8 @@ public class QuickAction extends PopupWindows implements OnDismissListener {
 	public static final int ANIM_GROW_FROM_RIGHT = 2;
 	public static final int ANIM_GROW_FROM_CENTER = 3;
 	public static final int ANIM_AUTO = 4;
-	
+	private boolean showOnTop;
+
 	/**
 	 * Constructor.
 	 * 
@@ -195,49 +192,57 @@ public class QuickAction extends PopupWindows implements OnDismissListener {
 	public void setOnActionItemClickListener(OnActionItemClickListener listener) {
 		mItemClickListener = listener;
 	}
-	
+
+	/**
+	 * Show popup mWindow
+	 */
+	public void show(int focusX, int focusY, View anchor) {
+		preShow();
+		mDidAction = false;
+
+		int[] location = new int[2];
+		anchor.getLocationOnScreen(location);
+		Rect anchorRect = new Rect(location[0], location[1], location[0] + anchor.getWidth(), location[1] + anchor.getHeight());
+
+		//mRootView.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+		mRootView.measure(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+
+		int screenWidth = mWindowManager.getDefaultDisplay().getWidth();
+		int screenHeight 	= mWindowManager.getDefaultDisplay().getHeight();
+
+		int rootWidth = mRootView.getMeasuredWidth();
+		int rootHeight = mRootView.getMeasuredHeight();
+
+		if (focusY == Integer.MIN_VALUE) focusY = anchorRect.top;
+		if (focusX == Integer.MIN_VALUE) focusX = anchorRect.centerX();
+
+		int xPos = (screenWidth - rootWidth) / 2;
+		int yPos = focusY - rootHeight;
+		if (!showOnTop) yPos = focusY;
+
+		boolean onTop = showOnTop;
+
+		// display on bottom
+		if (showOnTop && rootHeight > focusY ) {
+			yPos = focusY;
+			onTop = false;
+		}
+		else if (!showOnTop && rootHeight + focusY > screenHeight) {
+			onTop = true;
+			yPos = focusY - rootHeight;
+		}
+
+		showArrow(((onTop) ? R.id.arrow_down : R.id.arrow_up), focusX);
+		setAnimationStyle(screenWidth, anchorRect.centerX(), onTop);
+		mWindow.showAtLocation(anchor, Gravity.NO_GRAVITY, xPos, yPos);
+		if (mAnimateTrack) mTrack.startAnimation(mTrackAnim);
+	}
+
 	/**
 	 * Show popup mWindow
 	 */
 	public void show (View anchor) {
-		preShow();
-
-		int[] location 		= new int[2];
-		
-		mDidAction 			= false;
-		
-		anchor.getLocationOnScreen(location);
-
-		Rect anchorRect 	= new Rect(location[0], location[1], location[0] + anchor.getWidth(), location[1] 
-		                	+ anchor.getHeight());
-
-		//mRootView.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-		mRootView.measure(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		
-		int rootWidth 		= mRootView.getMeasuredWidth();
-		int rootHeight 		= mRootView.getMeasuredHeight();
-
-		int screenWidth 	= mWindowManager.getDefaultDisplay().getWidth();
-		//int screenHeight 	= mWindowManager.getDefaultDisplay().getHeight();
-
-		int xPos 			= (screenWidth - rootWidth) / 2;
-		int yPos	 		= anchorRect.top - rootHeight;
-
-		boolean onTop		= true;
-		
-		// display on bottom
-		if (rootHeight > anchor.getTop()) {
-			yPos 	= anchorRect.bottom;
-			onTop	= false;
-		}
-
-		showArrow(((onTop) ? R.id.arrow_down : R.id.arrow_up), anchorRect.centerX());
-		
-		setAnimationStyle(screenWidth, anchorRect.centerX(), onTop);
-	
-		mWindow.showAtLocation(anchor, Gravity.NO_GRAVITY, xPos, yPos);
-		
-		if (mAnimateTrack) mTrack.startAnimation(mTrackAnim);
+		show(Integer.MIN_VALUE, Integer.MIN_VALUE, anchor);
 	}
 
 	/**
@@ -313,7 +318,15 @@ public class QuickAction extends PopupWindows implements OnDismissListener {
 			mDismissListener.onDismiss();
 		}
 	}
-	
+
+	/**
+	 * Sets if the popup should be shown on top by default
+	 * @param showOnTop true to show on top
+	 */
+	public void showOnTop(boolean showOnTop) {
+		this.showOnTop = showOnTop;
+	}
+
 	/**
 	 * Listener for item click
 	 *

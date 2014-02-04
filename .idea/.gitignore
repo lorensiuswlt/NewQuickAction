@@ -1,0 +1,10 @@
+workspace.xml
+*.iws
+dataSources.xml
+sqlDataSources.xml
+dynamic.xml
+.project
+.classpath
+.settings
+bin
+out
