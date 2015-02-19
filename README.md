@@ -3,6 +3,37 @@ NewQuickAction
 
 NewQuickAction is a small android library to create QuickAction dialog.
 
+Installation
+===============
+
+Android Studio
+===============
+
+Paste or clone this library into the /libs folder, in the root directory of your project. Create a new folder: /libs if not already present. (This step is not required - only for keeping cleaner project structure)
+
+Edit settings.gradle by adding the library. You have also define a project directory for the library. Your settings.gradle should look like below:
+
+include ':app', ':SliderPreference'
+project(':SliderPreference').projectDir = new File('libs/SliderPreference')
+In app/build.gradle add the SliderPreference library as a dependency:
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.android.support:appcompat-v7:21.0.3'
+    compile project(":SliderPreference")
+}
+Sync project, clean and build. You can use the SliderPreference as part of your project now.
+
+Eclipse
+========
+
+Before you can add a SliderPreference to your application, you must first add a library reference:
+
+Clone or download a copy of the library
+Import the library into Eclipse: File menu -> Import -> Existing Project into Workspace
+Open your application's project properties and add a library reference to "SliderPreference"
+
+
 How to Use
 ==========
 This repo includes a sample Activity (__ExampleActivity1.java__) to show how to use QuickAction.
