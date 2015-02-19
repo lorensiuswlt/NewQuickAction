@@ -1,37 +1,37 @@
 NewQuickAction
 ==============
 
-NewQuickAction is a small android library to create QuickAction dialog.
+NewQuickAction is a small android library to create QuickAction dialogs.
 
 Installation
 ===============
 
-Android Studio
-===============
+### Android Studio
 
-Paste or clone this library into the /libs folder, in the root directory of your project. Create a new folder: /libs if not already present. (This step is not required - only for keeping cleaner project structure)
+ 1. Paste or clone this library into the `/libs` folder, in the root directory of your project. Create a new folder: `/libs` if not already present. (This step is not required - only for keeping cleaner project structure)
 
-Edit settings.gradle by adding the library. You have also define a project directory for the library. Your settings.gradle should look like below:
+ 2. Edit `settings.gradle` by adding the library. You have also define a project directory for the library. Your `settings.gradle` should look like below:
+	```
+	include ':app', ':NewQuickAction'
+	project(':NewQuickAction').projectDir = new File('libs/NewQuickAction')
+	```
+ 3. In `app/build.gradle` add the NewQuickAction library as a dependency:
+	```
+	dependencies {
+	    compile fileTree(dir: 'libs', include: ['*.jar'])
+	    compile 'com.android.support:appcompat-v7:21.0.3'
+	    compile project(":NewQuickAction")
+	}
+	```
 
-include ':app', ':SliderPreference'
-project(':SliderPreference').projectDir = new File('libs/SliderPreference')
-In app/build.gradle add the SliderPreference library as a dependency:
+ 4. Sync project, clean and build. You can use the NewQuickAction as part of your project now.
 
-dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:21.0.3'
-    compile project(":SliderPreference")
-}
-Sync project, clean and build. You can use the SliderPreference as part of your project now.
+### Eclipse
 
-Eclipse
-========
-
-Before you can add a SliderPreference to your application, you must first add a library reference:
-
-Clone or download a copy of the library
-Import the library into Eclipse: File menu -> Import -> Existing Project into Workspace
-Open your application's project properties and add a library reference to "SliderPreference"
+ 1. Before you can add a NewQuickAction to your application, you must first add a library reference:
+ 2. Clone or download a copy of the library
+ 3. Import the library into Eclipse: File menu -> Import -> Existing Project into Workspace
+ 4. Open your application's project properties and add a library reference to `NewQuickAction`
 
 
 How to Use
